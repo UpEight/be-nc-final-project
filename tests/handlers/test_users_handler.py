@@ -20,7 +20,7 @@ class TestUsersHandler(HandlerTestCase):
     def get_app(self):
         self.motor_client = motor.motor_tornado.MotorClient(
             os.environ["MONGODB_URI"])
-        self.mongo_db = self.motor_client["novado_test"]
+        self.mongo_db = self.motor_client["hosting_test"]
 
         return make_app({
             "motor_client": self.motor_client,

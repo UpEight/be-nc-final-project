@@ -6,13 +6,14 @@ from pymongo import ReturnDocument
 
 
 class UsersHandler(tornado.web.RequestHandler):
-    async def get(self, name):
+    async def get(self, uuid):
+        print(uuid)
         user = await self.settings["mongo_db"].users_collection.find_one(
-            {"name": name}, {"_id": 0})
+            {"uuid": uuid}, {"_id": 0})
 
         if user is None:
             raise tornado.web.HTTPError(
-                404, f"Missing user: {name}")
+                404, f"Missing user: {uuid}")
 
         self.finish(json.dumps(user))
 

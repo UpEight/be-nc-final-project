@@ -9,7 +9,13 @@ import tornado.web
 
 from service.handlers.users_handler import UsersHandler
 
-os.environ["MONGODB_URI"] = "mongodb://127.0.0.1:27017"
+from config import prod
+
+# os.environ["MONGODB_URI"] = "mongodb://127.0.0.1:27017"
+
+os.environ["MONGODB_URI"] = prod
+
+
 os.environ["SERVER_PORT"] = "9090"
 
 
@@ -26,7 +32,7 @@ def main(environ):
     motor_client = motor.motor_tornado.MotorClient(
         environ["MONGODB_URI"])
 
-    mongo_db = motor_client["novado_test"]
+    mongo_db = motor_client["hosting_test"]
 
     app = make_app({
         "motor_client": motor_client,
