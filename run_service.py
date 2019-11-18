@@ -7,7 +7,7 @@ import tornado.ioloop
 import tornado.platform.asyncio
 import tornado.web
 
-from tornado.options import define, options
+# from tornado.options import define, options
 
 from service.handlers.users_handler import UsersHandler
 
@@ -15,7 +15,7 @@ from service.handlers.users_handler import UsersHandler
 
 # os.environ["MONGODB_URI"] = prod_db_uri
 
-define("port", default=9090, help="run on the given port", type=int)
+# define("port", default=9090, help="run on the given port", type=int)
 
 
 def make_app(config):
@@ -26,7 +26,7 @@ def make_app(config):
 
 def main(environ):
     tornado.platform.asyncio.AsyncIOMainLoop().install()
-    ioloop = tornado.ioloop.IOLoop.current()
+    ioloop = tornado.ioloop.IOLoop.instance()
 
     motor_client = motor.motor_tornado.MotorClient(str(
         os.environ.get("PROD_MONGODB")))
@@ -38,9 +38,9 @@ def main(environ):
         "mongo_db": mongo_db
     })
 
-    # server = tornado.httpserver.HTTPServer(app)
-   # server = tornado.web.Application(app)
-    app.listen(options.port)
+    server = tornado.httpserver.HTTPServer(app)
+    port = int(os.environ.get("PORT", 9090))
+    server.listen(port)
 
     ioloop.start()
 
