@@ -11,6 +11,10 @@ from tornado.options import define, options
 
 from service.handlers.users_handler import UsersHandler
 
+# from config import prod_db_uri
+
+# os.environ["MONGODB_URI"] = prod_db_uri
+
 define("port", default=9090, help="run on the given port", type=int)
 
 
