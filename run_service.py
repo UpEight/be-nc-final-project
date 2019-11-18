@@ -24,7 +24,8 @@ def main(environ):
     tornado.platform.asyncio.AsyncIOMainLoop().install()
     ioloop = tornado.ioloop.IOLoop.current()
 
-    motor_client = motor.motor_tornado.MotorClient(environ["PROD_MONGODB"])
+    motor_client = motor.motor_tornado.MotorClient(
+        os.environ.get("PROD_MONGODB"))
 
     mongo_db = motor_client["hosting_test"]
 
