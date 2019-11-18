@@ -39,8 +39,8 @@ def main(environ):
     })
 
     # server = tornado.httpserver.HTTPServer(app)
-    server = tornado.web.Application(app)
-    server.listen(options.port)
+   # server = tornado.web.Application(app)
+    app.listen(options.port)
 
     ioloop.start()
 
