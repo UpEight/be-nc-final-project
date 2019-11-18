@@ -7,16 +7,15 @@ import tornado.ioloop
 import tornado.platform.asyncio
 import tornado.web
 
+from tornado.options import define, options
+
 from service.handlers.users_handler import UsersHandler
 
-from config import prod
+from config import prod_db_uri
 
-# os.environ["MONGODB_URI"] = "mongodb://127.0.0.1:27017"
+os.environ["MONGODB_URI"] = prod_db_uri
 
-os.environ["MONGODB_URI"] = prod
-
-
-os.environ["SERVER_PORT"] = "9090"
+define("port", default=9090, help="run on the given port", type=int)
 
 
 def make_app(config):
@@ -40,7 +39,7 @@ def main(environ):
     })
 
     server = tornado.httpserver.HTTPServer(app)
-    server.listen(int(environ["SERVER_PORT"]), "localhost")
+    server.listen(options.port)
 
     ioloop.start()
 
