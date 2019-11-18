@@ -11,9 +11,6 @@ from tornado.options import define, options
 
 from service.handlers.users_handler import UsersHandler
 
-from config import prod_db_uri
-
-
 define("port", default=9090, help="run on the given port", type=int)
 
 define("db", default="mongodb://127.0.0.1:27017",
