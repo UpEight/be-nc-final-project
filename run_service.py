@@ -38,7 +38,8 @@ def main(environ):
         "mongo_db": mongo_db
     })
 
-    server = tornado.httpserver.HTTPServer(app)
+    # server = tornado.httpserver.HTTPServer(app)
+    server = tornado.web.Application(app)
     server.listen(options.port)
 
     ioloop.start()
