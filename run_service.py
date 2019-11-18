@@ -17,6 +17,9 @@ os.environ["MONGODB_URI"] = prod_db_uri
 
 define("port", default=9090, help="run on the given port", type=int)
 
+define("db", default="mongodb://127.0.0.1:27017",
+       help="local mongodb uri", type=str)
+
 
 def make_app(config):
     return tornado.web.Application([
@@ -29,7 +32,7 @@ def main(environ):
     ioloop = tornado.ioloop.IOLoop.current()
 
     motor_client = motor.motor_tornado.MotorClient(
-        environ["MONGODB_URI"])
+        options.db)
 
     mongo_db = motor_client["hosting_test"]
 
