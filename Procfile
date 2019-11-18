@@ -1,1 +1,1 @@
-web: python run_service.py --port=$PORT --db=$PROD_MONGODB
+web: python run_service.py --port=$PORT

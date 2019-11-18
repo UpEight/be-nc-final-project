@@ -13,9 +13,6 @@ from service.handlers.users_handler import UsersHandler
 
 define("port", default=9090, help="run on the given port", type=int)
 
-define("db", default="mongodb://127.0.0.1:27017",
-       help="local mongodb uri", type=str)
-
 
 def make_app(config):
     return tornado.web.Application([
@@ -27,8 +24,7 @@ def main(environ):
     tornado.platform.asyncio.AsyncIOMainLoop().install()
     ioloop = tornado.ioloop.IOLoop.current()
 
-    motor_client = motor.motor_tornado.MotorClient(
-        options.db)
+    motor_client = motor.motor_tornado.MotorClient(environ["PROD_MONGODB"])
 
     mongo_db = motor_client["hosting_test"]
 
