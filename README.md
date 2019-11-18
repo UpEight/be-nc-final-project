@@ -1,25 +1,30 @@
 # be-nc-final-project
 
-## Local installation
+## Getting started
 
-1. Run the following commands:
+### Local installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/UpEight/be-nc-final-project
+cd be-nc-final-project
+```
+
+2. Create a virtual environment:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-Then select your new environment in VSCode by using the Python: Select Interpreter command from the Command Palette
-
-2. Run the following command to install the dependencies:
+3. Install the dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## To run the web server
-
-Run the following:
+4. Run the web server:
 
 ```bash
 python3 -m run_service
