@@ -17,18 +17,12 @@ class UsersHandler(tornado.web.RequestHandler):
 
         self.finish(json.dumps(user))
 
-    async def post(self, name):
-        await self.settings["mongo_db"].users_collection.replace_one(
-            {"name": name},
-            {
-                "name": name,
-                "interests": json.loads(self.request.body)['interests'],
-                "fruit": json.loads(self.request.body)['fruit']
-            },
-            upsert=True)
+    async def post(self):
+        new_user = await self.settings["mongo_db"].users_collection.insert_one(
+            json.loads(self.request.body))
 
         self.set_status(204)
-        self.finish()
+        self.finish("new user added")
 
     async def patch(self, name):
         user = await self.settings["mongo_db"].users_collection.find_one_and_update(
