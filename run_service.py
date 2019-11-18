@@ -11,6 +11,7 @@ import tornado.web
 
 from service.handlers.users_handler import UsersHandler
 from service.handlers.test_handler import TestHandler
+from service.handlers.add_user_handler import AddUserHandler
 
 # from config import prod_db_uri
 
@@ -22,6 +23,7 @@ from service.handlers.test_handler import TestHandler
 def make_app(config):
     return tornado.web.Application([
         ("/api/users/(.*)", UsersHandler),
+        ("/api/users", AddUserHandler),
         ("/api", TestHandler)
     ], **config)
 
