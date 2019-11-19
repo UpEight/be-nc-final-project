@@ -11,6 +11,15 @@ class AddUserHandler(tornado.web.RequestHandler):
             raise tornado.web.HTTPError(
                 400, f"Bad Request")
 
+        uuid = json.loads(self.request.body)["uuid"]
+
+        existing_user = await self.settings["mongo_db"].users_collection.find_one(
+            {"uuid": uuid}, {"_id": 0})
+
+        if (existing_user != None):
+            raise tornado.web.HTTPError(
+                400, f"Bad Request - user already exists")
+
         new_user = await self.settings["mongo_db"].users_collection.insert_one(
             json.loads(self.request.body))
         print(new_user.inserted_id)
