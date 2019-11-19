@@ -17,10 +17,26 @@ class UsersHandler(tornado.web.RequestHandler):
 
         self.finish(json.dumps(user))
 
-    async def patch(self, name):
+    async def patch(self, uuid):
+        id = json.loads(self.request.body)["id"]
+
+        if (id == ""):
+            raise tornado.web.HTTPError(
+                400, f"Bad Request")
+
+        user = await self.settings["mongo_db"].users_collection.find_one(
+            {"uuid": uuid}, {"_id": 0})
+
+        current_agenda = user["Agenda"]["going"]
+
+        for item in current_agenda:
+            if (id == item["id"]):
+                raise tornado.web.HTTPError(
+                    400, f"Bad Request - Agenda item already exists")
+
         user = await self.settings["mongo_db"].users_collection.find_one_and_update(
-            {"name": name},
-            {"$push": {"fruit": json.loads(
+            {"uuid": uuid},
+            {"$push": {"Agenda.going": json.loads(
                 self.request.body)}}, projection={"_id": 0}, return_document=ReturnDocument.AFTER
         )
 
