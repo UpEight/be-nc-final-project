@@ -12,4 +12,6 @@ class HandlerTestCase(tornado.testing.AsyncHTTPTestCase):
             self.get_url(path),
             method=method,
             body=body,
-            raise_error=False)
+            raise_error=False,
+            allow_nonstandard_methods=True
+        )
