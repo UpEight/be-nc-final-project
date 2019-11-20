@@ -7,26 +7,16 @@ import tornado.ioloop
 import tornado.platform.asyncio
 import tornado.web
 
-# from tornado.options import define, options
-
 from service.handlers.users_handler import UsersHandler
-from service.handlers.test_handler import TestHandler
 from service.handlers.add_user_handler import AddUserHandler
 from service.handlers.locations_handler import LocationsHandler
-
-# from config import prod_db_uri
-
-# os.environ["MONGODB_URI"] = prod_db_uri
-
-# define("port", default=9090, help="run on the given port", type=int)
 
 
 def make_app(config):
     return tornado.web.Application([
         ("/api/users/(.*)", UsersHandler),
         ("/api/users", AddUserHandler),
-        ("/api/locations/(.*)", LocationsHandler),
-        ("/api", TestHandler)
+        ("/api/locations/(.*)", LocationsHandler)
     ], **config)
 
 
