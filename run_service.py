@@ -10,13 +10,15 @@ import tornado.web
 from service.handlers.users_handler import UsersHandler
 from service.handlers.add_user_handler import AddUserHandler
 from service.handlers.locations_handler import LocationsHandler
+from service.handlers.api_handler import ApiHandler
 
 
 def make_app(config):
     return tornado.web.Application([
         ("/api/users/(.*)", UsersHandler),
         ("/api/users", AddUserHandler),
-        ("/api/locations/(.*)", LocationsHandler)
+        ("/api/locations/(.*)", LocationsHandler),
+        ("/api", ApiHandler)
     ], **config)
 
 
