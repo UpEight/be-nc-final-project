@@ -40,6 +40,8 @@ class UsersHandler(tornado.web.RequestHandler):
         self.finish(json.dumps(user))
 
     async def patch(self, uuid):
+        request_body = json.loads(self.request.body)
+
         id = json.loads(self.request.body)["id"]
 
         if (id == ""):
@@ -51,15 +53,22 @@ class UsersHandler(tornado.web.RequestHandler):
 
         current_agenda = user["Agenda"]["going"]
 
-        for item in current_agenda:
-            if (id == item["id"]):
-                raise tornado.web.HTTPError(
-                    400, f"Bad Request - Agenda item already exists")
+        if (len(request_body) == 1 and 'id' in request_body):
+            for item in current_agenda:
+                if (id == item["id"]):
+                    current_agenda.remove(item)
+                    print("removing item")
+        else:
+            for item in current_agenda:
+                if (id == item["id"]):
+                    raise tornado.web.HTTPError(
+                        400, f"Bad Request - Agenda item already exists")
+            current_agenda.append(request_body)
+            print("adding item")
 
         user = await self.settings["mongo_db"].users_collection.find_one_and_update(
             {"uuid": uuid},
-            {"$push": {"Agenda.going": json.loads(
-                self.request.body)}}, projection={"_id": 0}, return_document=ReturnDocument.AFTER
+            {"$set": {"Agenda.going": current_agenda}}, projection={"_id": 0}, return_document=ReturnDocument.AFTER
         )
 
         self.set_status(200)
