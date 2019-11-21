@@ -506,6 +506,87 @@ class TestUsersHandler(HandlerTestCase):
 
         self.assertEqual(b'2', response.body)
 
+    @tornado.testing.gen_test
+    async def test_patch_personality_adds_request_body_to_personality_key(self):
+        await self.mongo_db["users_collection"].insert_one(
+            {"uuid": "Sdjhjhj123",
+             "email": "c.beckett@dummy.com",
+             "username": "lordbecks",
+             "Profile": {
+                 "firstname": "Cutler",
+                 "lastname": "Beckett",
+                 "img": "",
+                 "user_description": "Top Boy",
+                 "age": "45",
+                 "gender": "m"
+             },
+             "Agenda": {
+                 "history": [],
+                 "going": [
+                     {
+                         "id": "61c34247dcf1be30d9aba564a005e77749d1dbaf",
+                         "date": "2019-12-24",
+                         "chatKey": "61c34247dcf1be30d9aba564a005e77749d1dbaf2019-12-24",
+                         "name": "London"
+                     }
+                 ]
+             }})
+
+        response = await self.fetch("/api/personality/Sdjhjhj123", method="PATCH", body=json.dumps(
+            {
+                "word_count": 1375,
+                "processed_language": "en",
+                "personality": [
+                    {
+                        "trait_id": "big5_openness",
+                        "name": "Openness",
+                        "category": "personality",
+                        "percentile": 0.843172828824265,
+                        "significant": "true",
+                        "children": [
+                            {
+                                "trait_id": "facet_adventurousness",
+                                "name": "Adventurousness",
+                                "category": "personality",
+                                "percentile": 0.7437159899414063,
+                                "significant": "true"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ))
+
+        self.assertEqual(200, response.code)
+
+        user = await self.mongo_db["users_collection"].find_one({"uuid": "Sdjhjhj123"})
+        actual = {
+                "word_count": 1375,
+                "processed_language": "en",
+                "personality": [
+                    {
+                        "trait_id": "big5_openness",
+                        "name": "Openness",
+                        "category": "personality",
+                        "percentile": 0.843172828824265,
+                        "significant": "true",
+                        "children": [
+                            {
+                                "trait_id": "facet_adventurousness",
+                                "name": "Adventurousness",
+                                "category": "personality",
+                                "percentile": 0.7437159899414063,
+                                "significant": "true"
+                            }
+                        ]
+                    }
+                ]
+            }
+        
+        expected = user["personality"]
+
+        self.assertEqual(actual, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

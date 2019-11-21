@@ -7,8 +7,6 @@ from pymongo import ReturnDocument
 
 class PersonalityHandler(tornado.web.RequestHandler):
     async def patch(self, uuid):
-        print(uuid)
-
         user = await self.settings["mongo_db"].users_collection.find_one_and_update(
             {"uuid": uuid},
             {"$set": {"personality": json.loads(self.request.body)}}, projection={"_id": 0}, return_document=ReturnDocument.AFTER
