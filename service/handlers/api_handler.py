@@ -190,6 +190,84 @@ class ApiHandler(tornado.web.RequestHandler):
                 "decription": "serves up the number of users going to the requested location_id",
                 "queries": [],
                 "exampleResponse": "2"
+            },
+            "PATCH /api/personality/:uuid": {
+                "description": "sets the user 'personality' attribute to the object sent on the request body",
+                "queries": [],
+                "exampleRequestBody": {
+                    "word_count": 1375,
+                    "processed_language": "en",
+                    "personality": [
+                        {
+                            "trait_id": "big5_openness",
+                            "name": "Openness",
+                            "category": "personality",
+                            "percentile": 0.843172828824265,
+                            "significant": "true",
+                            "children": [
+                                {
+                                    "trait_id": "facet_adventurousness",
+                                    "name": "Adventurousness",
+                                    "category": "personality",
+                                    "percentile": 0.7437159899414063,
+                                    "significant": "true"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "exampleResponse": {
+                    "Agenda": {
+                        "going": [
+                            {
+                                "id": "dba505d1dbaf",
+                                "date": "2019-12-24",
+                                "chatKey": "61c34247dcf1be30d9aba564a005e77749d1dbaf2019-12-24",
+                                "name": "Lon"
+                            },
+                            {
+                                "id": "dbaf7rwewrwr878",
+                                "date": "2019-11-21",
+                                "chatKey": "61c34247dcf1be30d9aba564a005e77749d1dbaf2019-12-24",
+                                "name": "Lon"
+                            }
+                        ],
+                        "history": []
+                    },
+                    "Profile": {
+                        "age": "",
+                        "firstname": "Test",
+                        "gender": "",
+                        "img": "",
+                        "lastname": "Signup3",
+                        "user_description": ""
+                    },
+                    "email": "test119@live.com",
+                    "username": "Test119",
+                    "uuid": "BAqzaYsDymMKemORNPTaG9Zli2D3",
+                    "personality": {
+                        "word_count": 1375,
+                        "processed_language": "en",
+                        "personality": [
+                            {
+                                "trait_id": "big5_openness",
+                                "name": "Openness",
+                                "category": "personality",
+                                "percentile": 0.843172828824265,
+                                "significant": "true",
+                                "children": [
+                                    {
+                                        "trait_id": "facet_adventurousness",
+                                        "name": "Adventurousness",
+                                        "category": "personality",
+                                        "percentile": 0.7437159899414063,
+                                        "significant": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
             }
         }
 
