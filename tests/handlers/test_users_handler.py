@@ -2,6 +2,7 @@ import json
 import os
 import unittest
 from unittest import mock
+from datetime import datetime
 
 import motor.motor_tornado
 import tornado.testing
@@ -215,7 +216,7 @@ class TestUsersHandler(HandlerTestCase):
         self.assertEqual(400, response.code)
 
     @tornado.testing.gen_test
-    async def test_patch_adds_request_body_to_Agenda_going_list(self):
+    async def test_patch_adds_request_body_containing_at_least_keys_id_and_date_to_Agenda_going_list(self):
         await self.mongo_db["users_collection"].insert_one(
             {"uuid": "Sdjhjhj123",
              "email": "c.beckett@dummy.com",
@@ -268,6 +269,103 @@ class TestUsersHandler(HandlerTestCase):
                             "name": "London"
                         }
                     ]
+                }
+
+            },
+            await self.mongo_db["users_collection"].find_one({"uuid": "Sdjhjhj123"})
+        )
+
+    @tornado.testing.gen_test
+    async def test_patch_sets_default_date_if_date_in_request_body_is_not_set(self):
+        await self.mongo_db["users_collection"].insert_one(
+            {"uuid": "Sdjhjhj123",
+             "email": "c.beckett@dummy.com",
+             "username": "lordbecks",
+             "Profile": {
+                 "firstname": "Cutler",
+                 "lastname": "Beckett",
+                 "img": "",
+                 "user_description": "Top Boy",
+                 "age": "45",
+                 "gender": "m"
+             },
+             "Agenda": {
+                 "history": [],
+                 "going": []
+             }})
+
+        response = await self.fetch("/api/users/Sdjhjhj123", method="PATCH", body=json.dumps(
+            {
+                "id": "61c34247dcf1be30d9aba564a005e77749d1dbaf",
+                "date": "",
+                "chatKey": "61c34247dcf1be30d9aba564a005e77749d1dbaf2019-12-24",
+                "name": "London"
+            }
+        ))
+
+        self.assertEqual(200, response.code)
+
+        user = await self.mongo_db["users_collection"].find_one({"uuid": "Sdjhjhj123"})
+
+        agenda_item_date = user["Agenda"]["going"][0]["date"]
+
+        current_date = datetime.today()
+        current_date_string = current_date.strftime(
+            '%Y-%m-%d')
+
+        self.assertEqual(current_date_string, agenda_item_date)
+
+    @tornado.testing.gen_test
+    async def test_patch_removes_item_from_Agenda_going_list_if_request_body_contains_id_only(self):
+        await self.mongo_db["users_collection"].insert_one(
+            {"uuid": "Sdjhjhj123",
+             "email": "c.beckett@dummy.com",
+             "username": "lordbecks",
+             "Profile": {
+                 "firstname": "Cutler",
+                 "lastname": "Beckett",
+                 "img": "",
+                 "user_description": "Top Boy",
+                 "age": "45",
+                 "gender": "m"
+             },
+             "Agenda": {
+                 "history": [],
+                 "going": [
+                     {
+                         "id": "61c34247dcf1be30d9aba564a005e77749d1dbaf",
+                         "date": "2019-12-24",
+                         "chatKey": "61c34247dcf1be30d9aba564a005e77749d1dbaf2019-12-24",
+                         "name": "London"
+                     }
+                 ]
+             }})
+
+        response = await self.fetch("/api/users/Sdjhjhj123", method="PATCH", body=json.dumps(
+            {
+                "id": "61c34247dcf1be30d9aba564a005e77749d1dbaf"
+            }
+        ))
+
+        self.assertEqual(200, response.code)
+
+        self.assertEqual(
+            {
+                "_id": mock.ANY,
+                "uuid": "Sdjhjhj123",
+                "email": "c.beckett@dummy.com",
+                "username": "lordbecks",
+                "Profile": {
+                    "firstname": "Cutler",
+                    "lastname": "Beckett",
+                    "img": "",
+                    "user_description": "Top Boy",
+                    "age": "45",
+                    "gender": "m"
+                },
+                "Agenda": {
+                    "history": [],
+                    "going": []
                 }
 
             },
