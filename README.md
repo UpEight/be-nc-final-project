@@ -1,6 +1,16 @@
-# be-nc-final-project
+# WANDR API
+
+A RESTful API for storing and updating user information for the WANDR mobile app. The user data is stored in single document format in a MongoDB database.
+
+The available endpoints are shown [here](https://be-nc-final-project-nomado.herokuapp.com/api)
 
 ## Getting started
+
+### Prerequisites
+
+- Requires Python >= 3.7.4
+
+- Requires a local running instance of MongoDB
 
 ### Local installation
 
@@ -29,3 +39,25 @@ pip install -r requirements.txt
 ```bash
 python3 -m run_service
 ```
+
+### Running the tests
+
+Run the following to run the unit tests:
+
+```bash
+python3 -m tests.handlers.test_users_handler
+```
+
+## Built With
+
+- [Tornado](https://www.tornadoweb.org/en/stable/index.html) - Python web framework and asynchronous networking library
+
+- [MongoDB](https://www.mongodb.com/) - NoSQL database
+
+- [Motor](https://motor.readthedocs.io/en/stable/index.html) - Asynchronous Python driver for MongoDB
+
+## Hosted With
+
+- [MongoDB Atlas](https://cloud.mongodb.com)
+
+- [Heroku](https://devcenter.heroku.com/)
