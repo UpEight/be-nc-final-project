@@ -108,15 +108,15 @@ class ApiHandler(tornado.web.RequestHandler):
                 }
             },
             "PATCH /api/users/:uuid": {
-                "description": "adds the object sent on the request body to the Agenda.going list",
+                "description": "Adds item to or removes item from Agenda.going list depending on request body format. To add an item, request body must contain keys 'id' and 'date' as a minimum. To remove an item, request body must contain key 'id' only",
                 "queries": [],
-                "exampleRequestBody": {
+                "exampleRequestBodyAddItem": {
                     "id": "779c0d02a3081a20b6a847fc2966989cf576a00b",
                     "date": "2019-12-20",
                     "chatKey": "779c0d02a3081a20b6a847fc2966989cf576a00b2019-12-20",
                     "name": "Grace Cathedral"
                 },
-                "exampleResponse": {
+                "exampleResponseAddItem": {
                     "uuid": "Sdjhjhj123",
                     "email": "c.beckett@dummy.com",
                     "username": "lordbecks",
@@ -151,15 +151,11 @@ class ApiHandler(tornado.web.RequestHandler):
                             }
                         ]
                     }
-                }
-            },
-            "DELETE /api/users/:uuid": {
-                "description": "removes the object sent on the request body from the Agenda.going list",
-                "queries": [],
-                "exampleRequestBody": {
+                },
+                "exampleRequestBodyRemoveItem": {
                     "id": "779c0d02a3081a20b6a847fc2966989cf576a00b"
                 },
-                "exampleResponse": {
+                "exampleResponseRemoveItem": {
                     "uuid": "Sdjhjhj123",
                     "email": "c.beckett@dummy.com",
                     "username": "lordbecks",
