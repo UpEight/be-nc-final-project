@@ -57,14 +57,20 @@ class UsersHandler(tornado.web.RequestHandler):
             for item in current_agenda:
                 if (id == item["id"]):
                     current_agenda.remove(item)
-                    print("removing item")
         else:
             for item in current_agenda:
                 if (id == item["id"]):
                     raise tornado.web.HTTPError(
                         400, f"Bad Request - Agenda item already exists")
+
+            current_date = datetime.today()
+            current_date_string = current_date.strftime(
+                '%Y-%m-%d')
+
+            if (request_body["date"] == ""):
+                request_body["date"] = current_date_string
+
             current_agenda.append(request_body)
-            print("adding item")
 
         user = await self.settings["mongo_db"].users_collection.find_one_and_update(
             {"uuid": uuid},
