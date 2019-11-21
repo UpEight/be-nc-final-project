@@ -79,27 +79,3 @@ class UsersHandler(tornado.web.RequestHandler):
 
         self.set_status(200)
         self.finish(json.dumps(user))
-
-    async def delete(self, uuid):
-        id = json.loads(self.request.body)["id"]
-
-        if (id == ""):
-            raise tornado.web.HTTPError(
-                400, f"Bad Request")
-
-        user = await self.settings["mongo_db"].users_collection.find_one(
-            {"uuid": uuid}, {"_id": 0})
-
-        current_agenda = user["Agenda"]["going"]
-
-        for item in current_agenda:
-            if (id == item["id"]):
-                current_agenda.remove(item)
-
-        user = await self.settings["mongo_db"].users_collection.find_one_and_update(
-            {"uuid": uuid},
-            {"$set": {"Agenda.going": current_agenda}}, projection={"_id": 0}, return_document=ReturnDocument.AFTER
-        )
-
-        self.set_status(200)
-        self.finish(json.dumps(user))
